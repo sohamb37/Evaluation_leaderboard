@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Transformer Models</title>
+  <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles/style.css') }}">
+</head>
+<body>
+  {% extends "base.html" %}  {% block title %}Transformer Models{% endblock %}  {% block content %}  <header>
+    <h1>Leaderboard</h1>
+  </header>
+  <!-- <a href="{{ url_for('.add_model') }}">Add Model</a> </header> -->
+
+  <main>
+    <section class="data-table">
+      <table>
+        <caption>Machine Translation Comparison</caption>
+        <thead>
+          <tr>
+            <th>Rank</th>
+	    <th>Training Data</th>
+            <th>Model</th>
+	    <th>Number of params</th>
+            <th>BLEU</th>
+            <th>Translation Edit Rate</th>
+            <th>ChrF</th>
+	    <th>BERTScore</th>
+	    <th>COMET</th>
+	    <th>BLEURT</th>            
+            <th>Paper</th>
+            <th>Code</th>
+            <th>Year</th>            
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>1</td>
+            </tr>
+          <tr>
+            <td>2</td>
+            </tr>
+          <tr>
+            <td>3</td>
+            </tr>
+            </tbody>
+      </table>
+    </section>
+  </main>
+
+  {% endblock %}  </body>
+</html>

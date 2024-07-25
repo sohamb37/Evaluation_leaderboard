@@ -1,0 +1,70 @@
+<!-- <!DOCTYPE html> -->
+{% extends "base.html" %} {% block title %}Add Model{% endblock %} {% block
+    content %}
+    <form method="POST" enctype="multipart/form-data">
+        <h3 align="center">Add Model</h3>
+        <div class="form-group">
+          <label for="benchmark">Benchmark</label>
+          <!-- <input
+            type="text"
+            class="form-control"
+            id="benchmark"
+            name="benchmark"
+            placeholder="Choose Benchmark"
+          /> -->
+          <select class="form-control" id="benchmark" name="benchmark">
+            <option value="Florens Hindi to Bengali">Florens Hindi to Bengali</option>
+            <option value="Florens Bengali to Hindi">Florens Bengali to Hindi</option>
+          </select>
+        </div>
+        <div class="form-group">
+            <label for="model_name">Model Name</label>
+            <input
+              type="text"
+              class="form-control"
+              id="model_name"
+              name="model_name"
+              placeholder="Enter model name"
+            />
+          </div>
+          <div class="form-group">
+            <label for="n_parameters">Number of Parameters</label>
+            <input
+              type="text"
+              class="form-control"
+              id="n_parameters"
+              name="n_parameters"
+              placeholder="Enter number of parameters"
+            />
+          </div>
+          <div class="form-group">
+            <label for="model_output">Model Output</label>
+            <input
+              type="file"
+              class="form-control"
+              id="model_output"
+              name="model_output"
+              placeholder="Upload model output"             
+            />
+          </div>
+          <br />
+      <button type="submit" class="btn btn-primary">Submit</button>
+    </form>
+    {% endblock %}
+<!-- <html>
+<head>
+  <title>Add Transformer Model</title>
+</head>
+<body>
+  <h1>Add Transformer Model</h1>
+  <form method="POST" action="{{ url_for('.add_model') }}">
+    <label for="rank">Rank:</label>
+    <input type="number" id="rank" name="rank" required><br>
+
+    <label for="model_name">Model Name:</label>
+    <input type="text" id="model_name" name="model_name" required><br>
+
+    <button type="submit">Add Model</button>
+  </form>
+</body>
+</html> -->

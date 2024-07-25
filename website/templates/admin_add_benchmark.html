@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+
+{% block title %}Add Benchmark{% endblock %}
+
+{% block content %}
+    <h3 align="center">Add Benchmark</h3>
+    <form method="POST" action="{{ url_for('views.admin_add_benchmark') }}" enctype="multipart/form-data">
+      <div class="form-group">
+        <label for="benchmark_name">Benchmark Name</label>
+        <input
+          type="text"
+          class="form-control"
+          id="benchmark_name"
+          name="benchmark_name"
+          placeholder="Enter benchmark name"
+          required
+        />
+      </div>
+      <div class="form-group">
+        <label for="description">Description</label>
+        <textarea
+          class="form-control"
+          id="description"
+          name="description"
+          placeholder="Enter description"
+        ></textarea>
+      </div>
+      <div class="form-group">
+        <label for="file">Upload Benchmark File</label>
+        <input
+          type="file"
+          class="form-control"
+          id="file"
+          name="file"
+          required
+        />
+      </div>
+      <br />
+      <button type="submit" class="btn btn-primary" name="action" value="add_benchmark">Add Benchmark</button>
+    </form>
+    <br />
+    <form method="POST" action="{{ url_for('views.home') }}">
+      <button type="submit" class="btn btn-primary" name="action" value="logout">Logout</button>
+    </form>
+{% endblock %}

@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Transformer Models</title>
+  <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles/style.css') }}">
+</head>
+<body>
+  {% extends "base.html" %}
+  {% block title %}Transformer Models{% endblock %}
+  {% block content %}
+  <header>
+    <h1>Leaderboard</h1>
+    <!-- Add a link to the add_model route if needed -->
+    <!-- <a href="{{ url_for('.add_model') }}">Add Model</a> -->    
+  </header>
+  <nav class="navigation-bar">
+    <ul>
+      <li><a href="#">NER</a></li>
+      <li><a href="#">ASR</a></li>
+      <li><a href="#">TTS</a></li>
+      <li><a href="#">MT</a></li>
+    </ul>
+  </nav>
+  
+<!-- Add a canvas element for the graph -->
+<canvas id="bleuChart" width="200" height="100"></canvas>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script>
+    // Get data passed from Flask
+    var uploadTimes = JSON.parse('{{ upload_times | tojson | safe }}');
+    var bleuScores = JSON.parse('{{ bleu_scores | tojson | safe }}');
+
+    // Initialize Chart.js
+    var ctx = document.getElementById('bleuChart').getContext('2d');
+    var myChart = new Chart(ctx, {
+        type: 'line',
+        data: {
+            labels: uploadTimes,
+            datasets: [{
+                label: 'BLEU Scores',
+                data: bleuScores,
+                fill: false,
+                borderColor: 'rgb(75, 192, 192)',
+                tension: 0.1
+            }]
+        },
+        options: {
+            scales: {
+                y: {
+                    beginAtZero: true
+                }
+            }
+        }
+    });
+  </script>
+
+  <main>
+    <section class="data-table">
+      <table>
+        <caption>Machine Translation Comparison</caption>
+        <thead>
+          <tr>
+            <th>Id</th>
+            <th>Training_Data</th>
+            <th>Model</th>
+            <th>No_of_params</th>
+            <th>
+              <form method="post" action="/">
+                <input type="hidden" name="bleu_rerank" value="true">
+                <button type="submit" class="small_button">BLEU rerank</button>
+              </form>
+            </th>
+            <th>
+              <form method="post" action="/">
+                <input type="hidden" name="ter_rerank" value="true">
+                <button type="submit" class="small_button">TER rerank</button>
+              </form>
+            </th>
+            <th>
+              <form method="post" action="/">
+                <input type="hidden" name="ChrF_rerank" value="true">
+                <button type="submit" class="small_button">ChrF rerank</button>
+              </form>
+            </th>
+            <th>
+              <form method="post" action="/">
+                <input type="hidden" name="BERTScore_rerank" value="true">
+                <button type="submit" class="small_button">BERTScore rerank</button>
+              </form>
+            </th>
+            <th>
+              <form method="post" action="/">
+                <input type="hidden" name="COMET_rerank" value="true">
+                <button type="submit" class="small_button">COMET rerank</button>
+              </form>
+            </th>
+            <!-- <th>BLEURT</th> -->
+            <th>Paper</th>
+            <th>Code</th>
+            <th>Year</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for model in models %}
+          <tr>
+            <td>{{ loop.index }}</td>
+            <td>{{ model.training_data }}</td>
+            <td>{{ model.model_name }}</td>
+            <td>{{ model.n_parameters }}</td>
+            <td>{{ model.bleu }}</td>
+            <td>{{ model.ter }}</td>
+            <td>{{ model.chrF }}</td>
+            <td>{{ model.BERTScore }}</td>
+            <td>{{ model.COMET }}</td>
+            <!-- <td>{{ model.result }}</td> -->
+            <td>{{ model.paper }}</td>
+            <td>{{ model.code }}</td>
+            <td>{{ model.year }}</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </section>
+  </main>
+  {% endblock %}
