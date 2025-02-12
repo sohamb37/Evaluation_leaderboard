@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Upload with Modal</title>
+    <style>
+         body {
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            font-family: Arial, sans-serif;
+        }
+        .form-container {
+            text-align: center;
+            align-items : center;
+            border: 1px solid #ccc;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            background-color: #f9f9f9;
+            width: 100%;
+            max-width: 500px;
+            margin-top: 100px;
+            height: auto;
+        }
+        .center {
+          position: absolute;
+          top: 50%;
+          left: 50%;
+          -ms-transform: translate(-50%, -50%);
+          transform: translate(-50%, -50%);
+        }
+        form {
+            display: inline-block;
+            text-align: left;
+            vertical-align: middle;
+        }
+        label {
+            display: block;
+            margin: 10px 0 5px;
+        }
+        input[type="file"]{
+            display: block;
+            margin: 0 auto 10px;
+        }
+        input[type="text"] {
+            display: block;
+            margin: 0 ;
+        }
+        input[type="submit"] {
+            margin-top: 10px;
+        }
+        /* Modal Styles */
+        .modal {
+            display: none; /* Hidden by default */
+            position: fixed;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.5); /* Black background with opacity */
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+
+        .modal-content {
+            position: relative; /* Set position to relative to position children absolutely */
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 5px;
+            width: 75%; /* Adjust the width to be a percentage of the viewport */
+            max-width: 400px; /* Max width to prevent excessive expansion */
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Optional: add shadow for better visibility */
+            text-align: center; /* Center text horizontally */
+            display: flex; /* Use flexbox to center content vertically */
+            flex-direction: column; /* Arrange children in a column */
+            justify-content: center; /* Center content vertically */
+            align-items: center; /* Center content horizontally */
+        }
+
+        .modal-header, .modal-footer {
+            padding: 10px;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .modal-footer {
+            border-bottom: none;
+        }
+
+        .close {
+            color: #aaa;
+            position: absolute; /* Absolute position relative to .modal-content */
+            top: 10px; /* Distance from the top */
+            right: 10px; /* Distance from the right */
+            font-size: 24px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .close:hover,
+        .close:focus {
+            color: black;
+            text-decoration: none;
+        }
+    </style>
+</head>
+<body>
+    {% extends "base.html" %} {% block title %}Dataset Upload{% endblock %} {% block
+    content %}
+    <div class="form-container center">
+        <h1>Upload Dataset</h1>
+        <form action="/upload" method="post" enctype="multipart/form-data">
+            <label for="datasetFieldName">Dataset Name</label>
+            <input type="text" id="datasetFieldName" name="datasetFieldName" required><br>
+
+            <label for="sourceText">Source Text File:</label>
+            <input type="file" id="sourceText" name="sourceText" accept=".txt" required><br>
+
+            <label for="SourceLanguage">Source Language Code</label>
+            <input type="text" id="sourceLang" name="sourceLang" required><br>
+
+            <label for="targetText">Target Text File:</label>
+            <input type="file" id="targetText" name="targetText" accept=".txt" required><br>
+
+            <label for="TargetLanguage">Target Language Code</label>
+            <input type="text" id="targetLang" name="targetLang" required><br>
+
+            <input type="submit" value="Upload">
+        </form>
+    </div>
+
+    <!-- Modal HTML -->
+    <div id="myModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <span class="close" id="closeModal">&times;</span>
+                <h2>Upload Status</h2>
+            </div>
+            <div class="modal-body">
+                <p id="modalMessage">{{ message }}</p>
+            </div>
+            <div class="modal-footer">
+                <button id="closeModalFooter">Close</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Function to open modal
+        function openModal() {
+            document.getElementById('myModal').style.display = 'flex';
+        }
+
+        // Function to close modal
+        function closeModal() {
+            document.getElementById('myModal').style.display = 'none';
+        }
+
+        // Show the modal if there's a message
+        window.onload = function() {
+            if (document.getElementById('modalMessage').textContent) {
+                openModal();
+            }
+        };
+
+        document.getElementById('closeModal').onclick = closeModal;
+        document.getElementById('closeModalFooter').onclick = closeModal;
+
+        // Close modal when clicking outside of it
+        window.onclick = function(event) {
+            if (event.target === document.getElementById('myModal')) {
+                closeModal();
+            }
+        }
+    </script>
+{% endblock %}
+</body>
+</html>

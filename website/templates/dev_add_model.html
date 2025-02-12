@@ -1,7 +1,7 @@
 <!-- <!DOCTYPE html> -->
 {% extends "base.html" %} {% block title %}Add Model{% endblock %} {% block
     content %}
-    <form method="POST" enctype="multipart/form-data">
+    <form action="/upload_model" method="POST" enctype="multipart/form-data">
         <h3 align="center">Add Model</h3>
         <div class="form-group">
           <label for="benchmark">Benchmark</label>
@@ -13,8 +13,10 @@
             placeholder="Choose Benchmark"
           /> -->
           <select class="form-control" id="benchmark" name="benchmark">
-            <option value="Florens Hindi to Bengali">Florens Hindi to Bengali</option>
-            <option value="Florens Bengali to Hindi">Florens Bengali to Hindi</option>
+            <option value="">Select a Dataset</option>
+            {% for dataset in datasets %}
+                <option value="{{ dataset.name }}">{{ dataset.name }}</option>
+            {% endfor %}
           </select>
         </div>
         <div class="form-group">
@@ -44,7 +46,41 @@
               class="form-control"
               id="model_output"
               name="model_output"
-              placeholder="Upload model output"             
+              accept=".txt"
+              required
+            />
+          </div>
+          <div class="form-group">
+            <label for="paperName">Paper Name</label>
+            <input
+              type="text"
+              class="form-control"
+              id="paperName"
+              name="paperName"
+              placeholder="Enter paper name"
+            />
+          </div>
+          <div class="form-group">
+            <label for="publicationYear">Publication Year</label>
+            <input
+              type="number"
+              class="form-control"
+              id="publicationYear"
+              name="publicationYear"
+              min="1900"
+              max="2099"
+              step="1"
+              value="2024"
+            />
+          </div>
+          <div class="form-group">
+            <label for="codeLink">Code Link</label>
+            <input
+              type="url"
+              class="form-control"
+              id="codeLink"
+              name="codeLink"
+              placeholder="Enter the Code Link"
             />
           </div>
           <br />

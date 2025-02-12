@@ -30,11 +30,23 @@
       <div class="collapse navbar-collapse" id="navbar">
         <div class="navbar-nav">
          
-          <a class="nav-item nav-link" id="home" href = "http://127.0.0.1:8222">Home</a>
-          <a class="nav-item nav-link" id="addModel" href="http://127.0.0.1:8222/add" >Add Model</a>          
-          <a class="nav-item nav-link" id="login" href= "http://127.0.0.1:8222/login">Login</a>
-          <a class="nav-item nav-link" id="signUp" href= "http://127.0.0.1:8222/signup">Sign Up</a>
-          
+          <a class="nav-item nav-link" id="home" href = "http://10.12.10.60:8222/home">Home</a>
+          {% if 'user' in session and session['role'] != 'admin' %}
+            <a class="nav-item nav-link" id="addModel" href="http://10.12.10.60:8222/add_model">Add Model</a>
+            <a class="nav-item nav-link" id="model_upload" href="http://10.12.10.60:8222/model_upload">Model Upload</a>
+            <a class="nav-item nav-link" id="create_environment" href="http://10.12.10.60:8222/create_environment">Create Environment</a>
+          {% endif %}
+          {% if 'user' not in session %}
+	  <a class="nav-item nav-link" id="login" href= "http://10.12.10.60:8222/login">Login</a>
+	  <a class="nav-item nav-link" id="signUp" href= "http://10.12.10.60:8222/signup">Sign Up</a>
+    <a class="nav-item nav-link" id="model_inference" href="http://10.12.10.60:8222/model_inference">Model Inference</a>
+          {% endif %}
+          {% if 'user' in session and session['role'] == 'admin' %}
+	  <a class="nav-item nav-link" id="dataset_upload" href= "http://10.12.10.60:8222/dataset_upload">Dataset Upload</a>
+          {% endif %}
+          {% if 'user' in session %}  <!-- Check if user is logged in -->
+	  <a class="nav-item nav-link" id="logout" href="http://10.12.10.60:8222/logout">Logout</a>
+          {% endif %}
         </div>
       </div>
     </nav>

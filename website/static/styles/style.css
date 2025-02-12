@@ -16,7 +16,7 @@ body {
   }
   
   main {
-    padding: 40px;
+    padding: 5px;
   }
   
   section {
@@ -82,9 +82,33 @@ body {
     background-color: #cccccc; /* Darker color for selected button */
   }
   
-  
-  
-  
+  .filter-dropdown {
+    display: flex;
+    align-items: center;
+    margin: 20px;
+}
+
+.filter-dropdown label {
+    margin-right: 5px; /* Space between label and dropdown */
+}
+
+.select {
+    padding: 5px; /* Reduced padding for a smaller dropdown */
+    margin-right: 100px; /* Space between dropdown and button */
+    width: 150px; /* Set a specific width for the dropdown */
+    font-size: 14px; /* Adjust font size if needed */
+}
+
+.button {
+    padding: 5px 10px; /* Optional: Adjust button padding */
+}
+
+.form-container {
+            width: inherit;
+            display: flex;             /* Use flexbox for layout */
+            align-items: center;      /* Center items vertically */
+            gap: 10px;                /* Space between items */
+        }
   
   
   

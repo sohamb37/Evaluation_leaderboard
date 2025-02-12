@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create Environment</title>
+    <style>
+        table {
+            width: 70%;
+            margin: 20px auto;
+            border-collapse: collapse;
+        }
+        th, td {
+            padding: 10px;
+            text-align: left;
+            border: 1px solid #ddd;
+        }
+        th {
+            background-color: #f4f4f4;
+        }
+        .install-btn {
+            background-color: #4CAF50;
+            color: white;
+            padding: 5px 10px;
+            border: none;
+            cursor: pointer;
+            text-align: center;
+        }
+        .install-btn:hover {
+            background-color: #45a049;
+        }
+        .create-env-btn {
+            background-color: #007BFF;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            cursor: pointer;
+            display: block;
+            margin: 20px auto;
+        }
+        .create-env-btn:hover {
+            background-color: #0056b3;
+        }
+
+        .filter-dropdown {
+            display: flex;
+            align-items: center;
+            margin: 20px;
+        }
+
+        .modal {
+            display: none; /* Hidden by default */
+            position: fixed;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.5); /* Black background with opacity */
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+
+        .modal-content {
+            position: relative; /* Set position to relative to position children absolutely */
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 5px;
+            width: 75%; /* Adjust the width to be a percentage of the viewport */
+            max-width: 400px; /* Max width to prevent excessive expansion */
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Optional: add shadow for better visibility */
+            text-align: center; /* Center text horizontally */
+            display: flex; /* Use flexbox to center content vertically */
+            flex-direction: column; /* Arrange children in a column */
+            justify-content: center; /* Center content vertically */
+            align-items: center; /* Center content horizontally */
+        }
+
+        .modal-header, .modal-footer {
+            padding: 10px;
+            border-bottom: 1px solid #ddd;
+        }
+        
+
+        .modal-footer {
+            border-bottom: none;
+        }
+    </style>
+</head>
+<body>
+    {% extends "base.html" %} {% block title %}Sign Up{% endblock %} {% block
+        content %}
+    <h1 style="text-align: center;">Create Environment</h1>
+
+        <form action="{{ url_for('views.model_filter') }}" method="POST">
+            <!-- Model Selection Dropdown -->
+            <div style="text-align: center; margin-bottom: 20px;">
+                <label for="env_name">Environment Name</label>
+                <input type="text" class="form-control" id="env_name" name="env_name" placeholder="Enter Env Name" {%if env_name%} value ={{env_name}} {%endif%} />
+                <label for="python_version">Python Version</label>
+                <input type="text" class="form-control" id="python_version" name="python_version" placeholder="Enter Python Version" {%if python_version%} value ={{python_version}} {%endif%} />
+                <label for="model_name">Select Model:</label>
+                <select name="model_filter" id="model_filter" onchange="this.form.submit()">
+                    <option value="">-- Select a Model --</option>
+                    {% for model in models %}
+                    <option value="{{ model.projectname }}" {% if model.projectname == modelfilter %} selected {% endif %}>{{ model.projectname }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+        </form>
+
+        <form action="{{ url_for('views.create_env') }}" method="POST">
+            {% if dependencies %}
+            <!-- Dependencies Table -->
+            <table>
+                <thead>
+                    <tr>
+                        <th>Dependency Name</th>
+                        <th>Dependency Version</th>
+                        <th>Install Command (Optional)</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for dep in dependencies %}
+                    <tr>
+                        <td>
+                            <input type="text" name="dependency_name" value="{{ dep['name'] }}" readonly />
+                        </td>
+                        <td>
+                            <input type="text" name="dependency_version" value="{{ dep['version'] }}" readonly />
+                        </td>
+                        <td>
+                            <input type="text" name="commands" placeholder="e.g., pip install {{ dep['name'] }}=={{ dep['version'] }}" />
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            <input type="hidden" name="env_name" value="{{ env_name }}" />
+            <input type="hidden" name="python_version" value="{{ python_version }}" />
+            <input type="hidden" name="model_filter" value="{{ modelfilter }}" />
+            <button type="submit" class="create-env-btn">Create Environment and Install Dependencies</button>
+            {% endif %}
+        </form>
+        <div id="myModal" class="modal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <span class="close" id="closeModal">&times;</span>
+                    <h2>Create Environment Status</h2>
+                </div>
+                <div class="modal-body">
+                    <p id="modalMessage">{{ message }}</p>
+                </div>
+                <div class="modal-footer">
+                    <button id="closeModalFooter">Close</button>
+                </div>
+            </div>
+        </div>
+        <script>
+            // Function to open modal
+            function openModal() {
+                document.getElementById('myModal').style.display = 'flex';
+            }
+        
+            // Function to close modal
+            function closeModal() {
+                document.getElementById('myModal').style.display = 'none';
+            }
+        
+            // Show the modal if there's a message
+            window.onload = function() {
+                if (document.getElementById('modalMessage').textContent) {
+                    openModal();
+                }
+            };
+        
+            document.getElementById('closeModal').onclick = closeModal;
+            document.getElementById('closeModalFooter').onclick = closeModal;
+        
+            // Close modal when clicking outside of it
+            window.onclick = function(event) {
+                if (event.target === document.getElementById('myModal')) {
+                    closeModal();
+                }
+            }
+        </script>
+    {% endblock %}
+</body>
+</html>

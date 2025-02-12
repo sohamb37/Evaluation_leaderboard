@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Model Inferencing</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+<body>
+    {% extends "base.html" %} {% block title %}Model Upload{% endblock %} {% block
+        content %}
+    <div class="container mt-5">
+        <h2>Model Inferencing for Translation</h2>
+
+        <!-- Model Inferencing Form -->
+        <form action="{{ url_for('views.infer_model') }}" method="POST">
+            <div class="form-group">
+                <label for="source_text">Source Text</label>
+                <textarea class="form-control" id="source_text" name="source_text" rows="4" placeholder="Enter text to translate..." required>{%if source_sent%}{{source_sent}} {%endif%}</textarea>
+            </div>
+
+            <div class="form-group">
+                <label for="model_name">Select Model</label>
+                <select class="form-control" id="model_name" name="model_name" required>
+                    <option value="">-- Select a Model --</option>
+                    {% for model in models %}
+                        <option value="{{ model.projectname }}" {% if model.projectname == model_name %} selected {% endif %}>{{ model.projectname }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <button type="submit" class="btn btn-primary">Generate Translation</button>
+        </form>
+
+        {% if translation %}
+            <div class="mt-4">
+                <h4>Translated Text</h4>
+                <textarea class="form-control" rows="4" readonly>{{ translation }}</textarea>
+            </div>
+        {% endif %}
+    </div>
+
+    <!-- Optional: Include Bootstrap JS for better UI behavior -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+{% endblock %}
+</body>
+</html>

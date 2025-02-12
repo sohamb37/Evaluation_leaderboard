@@ -1,4 +1,9 @@
 pandas
 flask
 sqlalchemy
-
+nltk
+evaluate
+unbabel-comet
+sacrebleu
+Flask-SQLAlchemy
+bert_score

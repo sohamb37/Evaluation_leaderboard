@@ -1,7 +1,6 @@
-from flask import Flask
+from flask import Flask, session, redirect, url_for
 from flask_sqlalchemy import SQLAlchemy
 from os import path
-#from flask_login import LoginManager
 
 db = SQLAlchemy()
 DB_NAME = "database.sqlite3"
@@ -20,16 +19,20 @@ def create_app():
     
     app.register_blueprint(views, url_prefix='/')    
 
-    from .models import Admin, TransformerModel
+    from .models import Admin, TransformerModel, Dataset, Users
     
-    with app.app_context():
+    with (app.app_context()):
         db.create_all()
 
+
         # Create a default admin user
-        if not Admin.query.filter_by(username='admin').first():
-            admin = Admin(username='admin')
-            admin.set_password('password')  # Set a default password
-            db.session.add(admin)
+        if not Users.query.filter_by(username='admin').first():
+            admin_user = Users(username='admin', password='password', email='admin@gmail.com', first_name='admin',
+                               user_role='admin', isLoggedIn=False)
+            admin_user.set_password('password')
+            # Add the user to the session
+            db.session.add(admin_user)
+            # Commit the session to save the user to the database
             db.session.commit()
             print('Default admin user created.')
 

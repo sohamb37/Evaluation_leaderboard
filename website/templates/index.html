@@ -13,14 +13,17 @@
   <header>
     <h1>Leaderboard</h1>
     <!-- Add a link to the add_model route if needed -->
-    <!-- <a href="{{ url_for('.add_model') }}">Add Model</a> -->    
+    <!-- <a href="{{ url_for('views.add_model') }}">Add Model</a> -->    
   </header>
   <nav class="navigation-bar">
     <ul>
-      <li><a href="#">NER</a></li>
+      <li><a href="#">MT</a></li>
       <li><a href="#">ASR</a></li>
       <li><a href="#">TTS</a></li>
-      <li><a href="#">MT</a></li>
+      <li><a href="#">NER</a></li>
+      <li><a href="#">POS</a></li>
+      <li><a href="#">Sentiment Analysis</a></li>
+      <li><a href="#">Natural Langugage Generation</a></li>
     </ul>
   </nav>
   
@@ -55,8 +58,43 @@
             }
         }
     });
+    function setSelectedValue(event) {
+            event.preventDefault();
+            const dropdown = document.getElementById('benchmark');
+            dropdown.value = value; // Set the value of the dropdown
+        }
+
+    function navigate_home(){
+        window.location.href = '/home';
+        console.log('function called');
+    }
   </script>
 
+<div class="filter-dropdown">
+  <form action="{{ url_for('views.lang_filter') }}" method="POST" class = "form-container">
+        <label for="lang_filter">Language Pair</label>
+        <select class="form-control" id="lang_filter" name="lang_filter">
+          <option value="">Select a Language Pair</option>
+          {% for langpair in lang_pairs %}
+              <option value="{{ langpair }}" {% if langpair == lang_pair %}selected{% endif %}>{{ langpair }}</option>
+          {% endfor %}
+        </select>
+        <button id="langfilterButton" type = 'submit' >Lang Filter</button>
+     </form>
+</div>
+
+  <div class="filter-dropdown">
+    <form action="{{ url_for('views.filter') }}" method="POST" class = "form-container">
+          <label for="benchmark">Benchmark</label>
+          <select class="form-control" id="benchmark" name="benchmark">
+            <option value="">Select a Benchmark</option>
+            {% for dataset in datasets %}
+                <option value="{{ dataset.name }}" {% if dataset.name == selected_option %}selected{% endif %}>{{ dataset.name }}</option>
+            {% endfor %}
+          </select>
+          <button id="filterButton" type = 'submit' >Filter</button>
+       </form>
+  </div>
   <main>
     <section class="data-table">
       <table>
@@ -68,39 +106,40 @@
             <th>Model</th>
             <th>No_of_params</th>
             <th>
-              <form method="post" action="/">
+              <form method="post" action="/home">
                 <input type="hidden" name="bleu_rerank" value="true">
-                <button type="submit" class="small_button">BLEU rerank</button>
+                <button type="submit" class="small_button">BLEU</button>
               </form>
             </th>
             <th>
-              <form method="post" action="/">
+              <form method="post" action="/home">
                 <input type="hidden" name="ter_rerank" value="true">
-                <button type="submit" class="small_button">TER rerank</button>
+                <button type="submit" class="small_button">TER</button>
               </form>
             </th>
             <th>
-              <form method="post" action="/">
+              <form method="post" action="/home">
                 <input type="hidden" name="ChrF_rerank" value="true">
-                <button type="submit" class="small_button">ChrF rerank</button>
+                <button type="submit" class="small_button">ChrF</button>
               </form>
             </th>
             <th>
-              <form method="post" action="/">
+              <form method="post" action="/home">
                 <input type="hidden" name="BERTScore_rerank" value="true">
-                <button type="submit" class="small_button">BERTScore rerank</button>
+                <button type="submit" class="small_button">BERTScore</button>
               </form>
             </th>
             <th>
-              <form method="post" action="/">
+              <form method="post" action="/home">
                 <input type="hidden" name="COMET_rerank" value="true">
-                <button type="submit" class="small_button">COMET rerank</button>
+                <button type="submit" class="small_button">COMET</button>
               </form>
             </th>
             <!-- <th>BLEURT</th> -->
             <th>Paper</th>
             <th>Code</th>
             <th>Year</th>
+            <th>Dataset</th>
           </tr>
         </thead>
         <tbody>
@@ -119,6 +158,9 @@
             <td>{{ model.paper }}</td>
             <td>{{ model.code }}</td>
             <td>{{ model.year }}</td>
+            <td>
+              <a href="{{ url_for('views.serve_file', filename=model.zip_file_path) }}">{{ model.benchmark }}</a>
+            </td>
           </tr>
           {% endfor %}
         </tbody>

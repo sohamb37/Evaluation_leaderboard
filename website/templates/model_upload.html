@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Model Upload</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f4f4f9;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: auto;
+            padding: 20px;
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        label {
+            font-weight: bold;
+            color: #333;
+        }
+
+        input[type="file"] {
+            width: 100%;
+            padding: 10px;
+            margin-top: 5px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            background-color: #f9f9f9;
+        }
+
+        button {
+            width: 100%;
+            padding: 12px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            font-size: 16px;
+            cursor: pointer;
+            margin-top: 20px;
+        }
+
+        button:hover {
+            background-color: #45a049;
+        }
+
+        .footer {
+            text-align: center;
+            margin-top: 20px;
+            color: #777;
+        }
+
+        .modal {
+            display: none; /* Hidden by default */
+            position: fixed;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.5); /* Black background with opacity */
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+
+        .modal-content {
+            position: relative; /* Set position to relative to position children absolutely */
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 5px;
+            width: 75%; /* Adjust the width to be a percentage of the viewport */
+            max-width: 400px; /* Max width to prevent excessive expansion */
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Optional: add shadow for better visibility */
+            text-align: center; /* Center text horizontally */
+            display: flex; /* Use flexbox to center content vertically */
+            flex-direction: column; /* Arrange children in a column */
+            justify-content: center; /* Center content vertically */
+            align-items: center; /* Center content horizontally */
+        }
+
+        .modal-header, .modal-footer {
+            padding: 10px;
+            border-bottom: 1px solid #ddd;
+        }
+        
+
+        .modal-footer {
+            border-bottom: none;
+        }
+    </style>
+</head>
+<body>
+    {% extends "base.html" %} {% block title %}Model Upload{% endblock %} {% block
+        content %}
+<div class="container">
+    <h1>Model Upload</h1>
+    
+    <form action="/create_project" method="POST" enctype="multipart/form-data">
+        <div class="form-group">
+            <label for="model_name">Model Name</label>
+            <input
+              type="text"
+              class="form-control"
+              id="model_name"
+              name="model_name"
+              placeholder="Enter Model Name"
+            />
+          </div>
+
+        <div class="form-group">
+            <label for="model_weights">Upload Model Weights File (.h5, .pth, etc.)</label>
+            <input type="file" id="model_weights" name="model_weights" accept=".h5,.pth,.bin,.pt" required>
+        </div>
+
+        <div class="form-group">
+            <label for="requirements_file">Upload Requirements File (requirements.txt)</label>
+            <input type="file" id="requirements_file" name="requirements_file" accept=".txt" required>
+        </div>
+        
+        <div class="form-group">
+            <label for="model_inference">Upload Python Inference File (model_inference.py)</label>
+            <input type="file" id="model_inference" name="model_inference" accept=".py" required>
+        </div>
+
+        <div class="form-group">
+            <label for="model_scripts">Upload Model Scripts</label>
+            <input type="file" id="model_scripts" name="model_scripts[]" accept=".*" multiple required>
+        </div>
+
+        <button type="submit">Upload</button>
+    </form>
+</div>
+<div id="myModal" class="modal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <span class="close" id="closeModal">&times;</span>
+            <h2>Model Upload Status</h2>
+        </div>
+        <div class="modal-body">
+            <p id="modalMessage">{{ message }}</p>
+        </div>
+        <div class="modal-footer">
+            <button id="closeModalFooter">Close</button>
+        </div>
+    </div>
+</div>
+<script>
+    // Function to open modal
+    function openModal() {
+        document.getElementById('myModal').style.display = 'flex';
+    }
+
+    // Function to close modal
+    function closeModal() {
+        document.getElementById('myModal').style.display = 'none';
+    }
+
+    // Show the modal if there's a message
+    window.onload = function() {
+        if (document.getElementById('modalMessage').textContent) {
+            openModal();
+        }
+    };
+
+    document.getElementById('closeModal').onclick = closeModal;
+    document.getElementById('closeModalFooter').onclick = closeModal;
+
+    // Close modal when clicking outside of it
+    window.onclick = function(event) {
+        if (event.target === document.getElementById('myModal')) {
+            closeModal();
+        }
+    }
+</script>
+{% endblock %}
+</body>
+</html>
